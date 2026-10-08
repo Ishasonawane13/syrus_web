@@ -14,3 +14,8 @@ pytest==8.3.4
 pytest-asyncio==0.24.0
 pytest-cov==6.0.0
 aiosqlite==0.20.0
+redis>=5.0.0
+growwapi>=0.0.1
+pyotp>=2.9.0
+nkeys>=0.2.0
+pynacl>=1.5.0

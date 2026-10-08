@@ -12,6 +12,12 @@ from app.models.instrument import Instrument
 from app.trading.simulator import simulator
 
 
+async def _get_price_val(symbol: str) -> float:
+    from app.services.market_service import get_instrument_price
+    data = await get_instrument_price(symbol)
+    return data["price"] if data else 0.0
+
+
 async def get_portfolio_value(db: AsyncSession, account: Account) -> Decimal:
     """Calculate current portfolio value from all positions × current prices."""
     result = await db.execute(
@@ -23,7 +29,7 @@ async def get_portfolio_value(db: AsyncSession, account: Account) -> Decimal:
 
     total = Decimal("0")
     for position, instrument in rows:
-        price = simulator.get_price(instrument.symbol)
+        price = await _get_price_val(instrument.symbol)
         total += Decimal(str(price)) * position.quantity
 
     return total
@@ -40,7 +46,7 @@ async def get_unrealized_pnl(db: AsyncSession, account: Account) -> Decimal:
 
     total_unrealized = Decimal("0")
     for position, instrument in rows:
-        current_price = Decimal(str(simulator.get_price(instrument.symbol)))
+        current_price = Decimal(str(await _get_price_val(instrument.symbol)))
         unrealized = (current_price - position.avg_price) * position.quantity
         total_unrealized += unrealized
 
@@ -100,7 +106,7 @@ async def get_all_positions(db: AsyncSession, account: Account) -> Dict[str, Lis
 
     positions = []
     for position, instrument in rows:
-        current_price = simulator.get_price(instrument.symbol)
+        current_price = await _get_price_val(instrument.symbol)
         market_value = current_price * position.quantity
         unrealized = (current_price - float(position.avg_price)) * position.quantity
         unrealized_pct = (
@@ -144,7 +150,7 @@ async def get_position_for_symbol(
         return None
 
     position, instrument = row
-    current_price = simulator.get_price(instrument.symbol)
+    current_price = await _get_price_val(instrument.symbol)
     market_value = current_price * position.quantity
     unrealized = (current_price - float(position.avg_price)) * position.quantity
     unrealized_pct = (

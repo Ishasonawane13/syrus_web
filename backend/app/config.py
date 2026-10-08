@@ -45,5 +45,13 @@ class Settings(BaseSettings):
     MARKET_SEED: int = 42
     MARKET_TICK_INTERVAL: int = 30
 
+    # Market Data Provider
+    MARKET_DATA_PROVIDER: str = "simulator"  # simulator | groww
+    REDIS_URL: str = "redis://localhost:6379/0"
+    GROWW_API_KEY: Optional[str] = None
+    GROWW_API_SECRET: Optional[str] = None
+    GROWW_TOTP_SECRET: Optional[str] = None
+    GROWW_AUTH_TOKEN: Optional[str] = None
+
 
 settings = Settings()

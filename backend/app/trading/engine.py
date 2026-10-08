@@ -106,8 +106,10 @@ class TradingEngine:
         if instrument is None:
             raise ValueError(f"Instrument {order.instrument_id} not found")
 
-        # 4. Get execution price from simulator
-        raw_price = simulator.get_price(instrument.symbol)
+        # 4. Get execution price from simulator/redis
+        from app.services.market_service import get_instrument_price
+        data = await get_instrument_price(instrument.symbol)
+        raw_price = data["price"] if data else 0.0
         exec_price = Decimal(str(simulator.apply_slippage(raw_price, order.quantity, order.side)))
         quantity = order.quantity
         trade_value = exec_price * quantity

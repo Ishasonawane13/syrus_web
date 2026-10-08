@@ -46,7 +46,11 @@ async def create_order_proposal(
     active_symbols = [row[0] for row in sym_result.all()]
 
     # Get current price
-    current_price = simulator.get_price(symbol.upper()) if instrument else 0.0
+    current_price = 0.0
+    if instrument:
+        from app.services.market_service import get_instrument_price
+        data = await get_instrument_price(symbol.upper())
+        current_price = data["price"] if data else 0.0
 
     # Get current holdings for SELL check
     current_holdings = 0

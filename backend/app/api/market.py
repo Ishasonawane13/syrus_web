@@ -23,7 +23,7 @@ async def list_instruments(db: AsyncSession = Depends(get_db)):
 @router.get("/{symbol}/price", response_model=MarketPriceResponse)
 async def get_price(symbol: str):
     """Get current simulated market price for a symbol."""
-    data = get_instrument_price(symbol.upper())
+    data = await get_instrument_price(symbol.upper())
     if not data:
         raise HTTPException(status_code=404, detail=f"Instrument '{symbol}' not found")
     return data
@@ -32,7 +32,7 @@ async def get_price(symbol: str):
 @router.get("/{symbol}/orderbook", response_model=OrderBookResponse)
 async def get_book(symbol: str):
     """Get simulated bid/ask order book depth for a symbol."""
-    book = get_order_book(symbol.upper())
+    book = await get_order_book(symbol.upper())
     if not book:
         raise HTTPException(status_code=404, detail=f"Instrument '{symbol}' not found")
     return book

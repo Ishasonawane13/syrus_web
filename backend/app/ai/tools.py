@@ -215,14 +215,14 @@ async def execute_tool(
 
     elif name == "get_market_price":
         symbol = str(args.get("symbol", "")).upper()
-        price_info = get_instrument_price(symbol)
+        price_info = await get_instrument_price(symbol)
         if not price_info:
             return {"error": f"Instrument {symbol} not found"}
         return price_info
 
     elif name == "get_order_book":
         symbol = str(args.get("symbol", "")).upper()
-        book = get_order_book(symbol)
+        book = await get_order_book(symbol)
         if not book:
             return {"error": f"Orderbook not found for {symbol}"}
         return book
@@ -253,7 +253,7 @@ async def execute_tool(
             limit_price=limit_price,
         )
 
-        curr_price = get_instrument_price(symbol)
+        curr_price = await get_instrument_price(symbol)
         price_val = curr_price["price"] if curr_price else 0.0
 
         return {
