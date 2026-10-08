@@ -1,6 +1,7 @@
 """
 FastAPI Application Entrypoint for AI Trading Copilot.
 """
+from fastapi import FastAPI
 from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
