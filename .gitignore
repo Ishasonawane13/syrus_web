@@ -1,0 +1,23 @@
+.env
+
+# Python
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.coverage
+htmlcov/
+.venv/
+venv/
+
+# Node and Vite
+node_modules/
+dist/
+.vite/
+
+# Local environment files
+.env.*
+!.env.example
+
+# Operating system files
+.DS_Store
+Thumbs.db
